@@ -13,8 +13,8 @@ pub trait ReadCallback {
 /// A trait dictating a memory write callback for an emulator.
 /// If you want to easily create a one-off implementation, see [`FunctionWriteCallback`].
 pub trait WriteCallback {
-    /// The callback to be called when memory is read.
-    /// This will be called in place of actually reading the memory!
+    /// The callback to be called when memory is written.
+    /// This will be called in place of actually writing the memory!
     fn callback(&mut self, state: &mut State, address: u16, byte: u8);
 }
 
