@@ -8,7 +8,7 @@
 ![Maintenance](https://img.shields.io/maintenance/as-is/2024?color=gold)
 # r6502
 
-### Yet another NMOS 6502 emulator.
+### Yet another MOS 6502 emulator.
   
 ---  
 
@@ -20,13 +20,13 @@ instead having you step the emulator one opcode at a time and handle them yourse
 ## Feature Flags
 The following feature flags exist:  
 
-| Name      | Description                                                                                                                                                                                                  |  
-|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|  
-| bcd       | Enable binary-coded decimal arithmetic.<br/>Enabled by default. Disable if you're writing a NES emulator.<br/>Note that invalid BCD is left untested and will not function faithfully to the NMOS 6502.      |  
-| bytemuck  | Enables [bytemuck](https://docs.rs/bytemuck/) support.                                                                                                                                                       |  
-| arbitrary | Enables [arbitrary](https://docs.rs/arbitrary/) support. This will pull in `std`.                                                                                                                            |  
-| serde     | Enables [serde](https://docs.rs/serde) support.                                                                                                                                                              |  
-| hashbrown | Enables [hashbrown](https://docs.rs/hashbrown) support.                                                                                                                                                      |
+| Name      | Description                                                                                                                                                                                                 |  
+|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|  
+| bcd       | Enable binary-coded decimal arithmetic.<br/>Enabled by default. Disable if you're writing a NES emulator.<br/>Note that invalid BCD is left untested and will not function faithfully to the MOS 6502.      |  
+| bytemuck  | Enables [bytemuck](https://docs.rs/bytemuck/) support.                                                                                                                                                      |  
+| arbitrary | Enables [arbitrary](https://docs.rs/arbitrary/) support. This will pull in `std`.                                                                                                                           |  
+| serde     | Enables [serde](https://docs.rs/serde) support.                                                                                                                                                             |  
+| hashbrown | Enables [hashbrown](https://docs.rs/hashbrown) support.                                                                                                                                                     |
 
 ## Example
 ```rust ignore  
@@ -54,7 +54,7 @@ fn main() {
 
     loop {
         let interrupt_requested = emu.step()
-            .expect("found an invalid opcode (only NMOS 6502 opcodes are supported)");
+            .expect("found an invalid opcode (only MOS 6502 opcodes are supported)");
         if interrupt_requested { // Go to IRQ interrupt vector 
             let vector = u16::from_le_bytes([
                 emu.read(0xFFFE),
