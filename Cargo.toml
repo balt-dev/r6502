@@ -1,6 +1,6 @@
 [package]
 name = "r6502"
-version = "1.0.5"
+version = "1.0.6"
 authors = ["baltdev"]
 edition = "2021"
 description = "A simple MOS 6502 emulator."
