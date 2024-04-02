@@ -1,12 +1,15 @@
 [package]
 name = "r6502"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["baltdev"]
 edition = "2021"
 description = "A simple NMOS 6502 emulator."
 license = "Apache-2.0 OR MIT"
 documentation = "https://docs.rs/r6502"
-repository = ""
+repository = "https://github.com/balt-dev/r6502/"
+rust-version = "1.66.1"
+categories = ["no-std", "no-std::no-alloc", "emulators"]
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

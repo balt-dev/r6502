@@ -5,13 +5,14 @@
 [![Latest version](https://img.shields.io/crates/v/r6502.svg)](https://crates.io/crates/r6502)
 [![License](https://img.shields.io/crates/l/r6502.svg)](https://github.com/balt-dev/r6502/blob/master/LICENSE-MIT)
 [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
+![Maintenance](https://img.shields.io/maintenance/as-is/2024?color=gold)
 # r6502
 
 ### Yet another NMOS 6502 emulator.
   
 ---  
 
-Designed to support `no-std` and not require an allocator nor any unsafe code.
+Designed to support `no-std` and not require an allocator nor any unsafe code, and be reasonably fast.
 
 The API of this crate shies away from implementing interrupt handling,   
 instead having you step the emulator one opcode at a time and handle them yourself.
@@ -19,13 +20,13 @@ instead having you step the emulator one opcode at a time and handle them yourse
 ## Feature Flags
 The following feature flags exist:  
 
-| Name      | Description                                                                                                                                                                                             |  
-|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|  
-| bcd       | Enable binary-coded decimal arithmetic.<br/>Enabled by default. Disable if you're writing a NES emulator.<br/>Note that invalid BCD is left untested and will not function faithfully to the NMOS 6502. |  
-| bytemuck  | Enables [bytemuck](https://docs.rs/bytemuck/) support.                                                                                                                                                  |  
-| arbitrary | Enables [arbitrary](https://docs.rs/arbitrary/) support. This will pull in `std`.                                                                                                                       |  
-| serde     | Enables [serde](https://docs.rs/serde) support.                                                                                                                                                         |  
-| hashbrown | Enables [hashbrown](https://docs.rs/hashbrown) support.                                                                                                                                                 |
+| Name      | Description                                                                                                                                                                                                  |  
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|  
+| bcd       | Enable binary-coded decimal arithmetic.<br/>Enabled by default. Disable if you're writing a NES emulator.<br/>Note that invalid BCD is left untested and will not function faithfully to the NMOS 6502.      |  
+| bytemuck  | Enables [bytemuck](https://docs.rs/bytemuck/) support.                                                                                                                                                       |  
+| arbitrary | Enables [arbitrary](https://docs.rs/arbitrary/) support. This will pull in `std`.                                                                                                                            |  
+| serde     | Enables [serde](https://docs.rs/serde) support.                                                                                                                                                              |  
+| hashbrown | Enables [hashbrown](https://docs.rs/hashbrown) support.                                                                                                                                                      |
 
 ## Example
 ```rust ignore  
