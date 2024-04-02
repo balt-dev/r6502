@@ -1,4 +1,4 @@
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/balt-dev/r6502/.github%2Fworkflows%2Frust.yml?branch=master&style=flat&label=tests)](https://github.com/balt-dev/descape/actions/)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/balt-dev/r6502/.github%2Fworkflows%2Frust.yml?branch=master&style=flat&label=tests)](https://github.com/balt-dev/r6502/actions/)
 [![Documentation](https://docs.rs/r6502/badge.svg)](https://docs.rs/r6502)
 [![MSRV](https://img.shields.io/badge/MSRV-1.66.1-gold)](https://gist.github.com/alexheretic/d1e98d8433b602e57f5d0a9637927e0c)
 [![Repository](https://img.shields.io/badge/-GitHub-%23181717?style=flat&logo=github&labelColor=%23555555&color=%23181717)](https://github.com/balt-dev/r6502)
