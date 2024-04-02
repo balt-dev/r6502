@@ -1,0 +1,29 @@
+[package]
+name = "r6502"
+version = "0.1.0"
+authors = ["baltdev"]
+edition = "2021"
+description = "A simple NMOS 6502 emulator."
+license = "Apache-2.0 OR MIT"
+documentation = "https://docs.rs/r6502"
+repository = ""
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+
+[dependencies]
+bitflags = "2"
+
+bytemuck = {version = "1", features = ["derive", "min_const_generics"], optional = true}
+arbitrary = {version = "1", features = ["derive"], optional = true}
+serde = {version = "1", features = ["derive"], optional = true}
+serde_with = {version = "3", optional = true, default-features = false, features = ["macros"]}
+cfg_eval = {version = "0.1", optional = true}
+
+[features]
+default = ["bcd"]
+bcd = []
+bytemuck = ["dep:bytemuck", "bitflags/bytemuck"]
+arbitrary = ["dep:arbitrary", "bitflags/arbitrary"]
+serde = ["dep:serde", "dep:serde_with", "dep:cfg_eval", "bitflags/serde"]
