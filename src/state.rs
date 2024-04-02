@@ -4,8 +4,8 @@ extern crate std;
 
 #[cfg(feature = "serde")]
 use {
-    serde::{Serialize, Deserialize},
-    serde_with::{As, Bytes}
+    serde::{Deserialize, Serialize},
+    serde_with::{As, Bytes},
 };
 
 #[derive(Copy, Clone, PartialEq, Eq, core::hash::Hash)]
@@ -39,7 +39,7 @@ pub struct State {
     /// but grows the struct's size considerably.
     /// Consider storing this struct on the heap if this is undesirable and you have one.
     #[cfg_attr(feature = "serde", serde(with = "As::<Bytes>"))]
-    pub memory: [u8; 256 * 256]
+    pub memory: [u8; 256 * 256],
 }
 
 #[allow(clippy::missing_fields_in_debug)]
@@ -66,7 +66,7 @@ impl Default for State {
             stack_pointer: 0xFF,
             status: Status::default(),
             memory: [0; 256 * 256],
-            _padding: 0
+            _padding: 0,
         }
     }
 }

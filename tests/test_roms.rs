@@ -18,7 +18,7 @@ fn all_suite_a() -> Result<(), usize> {
             if trap_number != 0xFF {
                 eprintln!("!!! ENTERED TRAP !!!");
                 eprintln!("{:02x?}", emulator.state);
-                eprintln!("Failed test: {trap_number}", );
+                eprintln!("Failed test: {trap_number}",);
                 return Err(0);
             }
             break;
@@ -57,15 +57,15 @@ fn functional_test() -> Result<(), usize> {
             }
             eprintln!("----------------------------[STACK]-----------------------------");
             for i in 0..16 {
-                eprintln!("{:02x?}", &emulator.state.memory[0x100 + (i * 16)..0x100 + ((i + 1) * 16)])
+                eprintln!(
+                    "{:02x?}",
+                    &emulator.state.memory[0x100 + (i * 16)..0x100 + ((i + 1) * 16)]
+                )
             }
             return Err(0);
         }
         if needs_interrupt {
-            let vector = u16::from_le_bytes([
-                emulator.read(0xFFFE),
-                emulator.read(0xFFFF)
-            ]);
+            let vector = u16::from_le_bytes([emulator.read(0xFFFE), emulator.read(0xFFFF)]);
             eprintln!("[MASKABLE INTERRUPT, GOING TO IRQ VECTOR @ {vector:02X}]");
             // Go to interrupt vector
             emulator.state.program_counter = vector;

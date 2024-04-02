@@ -4,10 +4,13 @@
 #![forbid(unsafe_code)]
 #![doc = include_str!("../README.md")]
 
-pub mod state;
-pub mod instructions;
 pub mod emulation;
+pub mod instructions;
+pub mod state;
 
-pub use instructions::{Opcode, Instruction, AddressMode};
+pub use emulation::{
+    DefaultReadCallback, DefaultWriteCallback, Emulator, FunctionReadCallback,
+    FunctionWriteCallback, ReadCallback, WriteCallback,
+};
+pub use instructions::{AddressMode, Instruction, Opcode};
 pub use state::{State, Status};
-pub use emulation::{Emulator, ReadCallback, WriteCallback, DefaultReadCallback, DefaultWriteCallback, FunctionReadCallback, FunctionWriteCallback};

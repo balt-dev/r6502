@@ -21,8 +21,9 @@ pub trait WriteCallback {
 /// A helper for easily creating simple implementations of [`ReadCallback`].
 pub struct FunctionReadCallback<F>(pub F);
 
-impl<F> ReadCallback for FunctionReadCallback<F> where
-    F: FnMut(&mut State, u16) -> u8
+impl<F> ReadCallback for FunctionReadCallback<F>
+where
+    F: FnMut(&mut State, u16) -> u8,
 {
     fn callback(&mut self, state: &mut State, address: u16) -> u8 {
         self.0(state, address)
@@ -32,8 +33,9 @@ impl<F> ReadCallback for FunctionReadCallback<F> where
 /// A helper for easily creating simple implementations of [`WriteCallback`].
 pub struct FunctionWriteCallback<F>(pub F);
 
-impl<F> WriteCallback for FunctionWriteCallback<F> where
-    F: FnMut(&mut State, u16, u8)
+impl<F> WriteCallback for FunctionWriteCallback<F>
+where
+    F: FnMut(&mut State, u16, u8),
 {
     fn callback(&mut self, state: &mut State, address: u16, byte: u8) {
         self.0(state, address, byte);
@@ -116,7 +118,8 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
     #[inline]
     #[must_use]
     pub fn with_rom_from(mut self, slice: &[u8], location: u16) -> Self {
-        self.state.memory[location as usize..location as usize + slice.len()].copy_from_slice(slice);
+        self.state.memory[location as usize..location as usize + slice.len()]
+            .copy_from_slice(slice);
         self
     }
 
@@ -181,7 +184,6 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
         self.read(0x100 + u16::from(self.state.stack_pointer))
     }
 
-
     /// Sets a callback to be called when memory is read from, allowing for memory-mapped reads.
     /// See [`ReadCallback`].
     #[inline]
@@ -190,7 +192,7 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
         Emulator {
             state: self.state,
             read_callback: callback,
-            write_callback: self.write_callback
+            write_callback: self.write_callback,
         }
     }
 
@@ -202,7 +204,7 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
         Emulator {
             state: self.state,
             read_callback: self.read_callback,
-            write_callback: callback
+            write_callback: callback,
         }
     }
 }
@@ -212,14 +214,15 @@ impl Default for Emulator<DefaultReadCallback, DefaultWriteCallback> {
         Self {
             state: State::default(),
             read_callback: DefaultReadCallback,
-            write_callback: DefaultWriteCallback
+            write_callback: DefaultWriteCallback,
         }
     }
 }
 
-
 #[allow(clippy::missing_fields_in_debug)]
-impl<R: ReadCallback + core::fmt::Debug, W: WriteCallback + core::fmt::Debug> core::fmt::Debug for Emulator<R, W> {
+impl<R: ReadCallback + core::fmt::Debug, W: WriteCallback + core::fmt::Debug> core::fmt::Debug
+    for Emulator<R, W>
+{
     fn fmt(&self, fmt: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         fmt.debug_struct("Emulator")
             .field("state", &self.state)
@@ -242,7 +245,10 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
         Some(match mode {
             Absolute(addr) => addr,
             ZeroPage(addr) => u16::from(addr),
-            Relative(offset) => self.state.program_counter.wrapping_add_signed(i16::from(offset)),
+            Relative(offset) => self
+                .state
+                .program_counter
+                .wrapping_add_signed(i16::from(offset)),
             AbsoluteIndirect(addr) => {
                 let high = self.read(addr);
                 let low = self.read(addr.wrapping_add(1));
@@ -384,13 +390,19 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
 
                     let (high_lhs, low_lhs) = to_bcd_nibbles(lhs);
                     let (high_rhs, low_rhs) = to_bcd_nibbles(rhs);
-                    let low_sum = low_lhs + low_rhs + u8::from(self.state.status.contains(Status::CARRY));
+                    let low_sum =
+                        low_lhs + low_rhs + u8::from(self.state.status.contains(Status::CARRY));
                     let (low_carry, low) = (low_sum / 10, low_sum % 10);
                     let high_sum = high_lhs + high_rhs + low_carry;
                     let (sum, carry) = from_bcd_nibbles(low, high_sum);
                     self.state.status.set(Status::CARRY, carry);
-                    let overflow_sum = u16::from(from_bcd(lhs)) + u16::from(from_bcd(rhs)) + u16::from(self.state.status.contains(Status::CARRY));
-                    self.state.status.set(Status::OVERFLOW, (lhs & 0x80) != (overflow_sum & 0x80) as u8);
+                    let overflow_sum = u16::from(from_bcd(lhs))
+                        + u16::from(from_bcd(rhs))
+                        + u16::from(self.state.status.contains(Status::CARRY));
+                    self.state.status.set(
+                        Status::OVERFLOW,
+                        (lhs & 0x80) != (overflow_sum & 0x80) as u8,
+                    );
                     self.state.status.set(Status::ZERO, sum == 0);
                     self.state.status.set(Status::NEGATIVE, (sum as i8) < 0);
                     self.state.accumulator = sum;
@@ -405,7 +417,9 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
 
                     let (high_lhs, low_lhs) = to_bcd_nibbles(lhs);
                     let (high_rhs, low_rhs) = to_bcd_nibbles(rhs);
-                    let mut low = low_lhs as i8 - low_rhs as i8 - i8::from(!self.state.status.contains(Status::CARRY));
+                    let mut low = low_lhs as i8
+                        - low_rhs as i8
+                        - i8::from(!self.state.status.contains(Status::CARRY));
                     let mut low_borrow = 0;
                     if low < 0 {
                         low += 10;
@@ -493,18 +507,22 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
                 let byte = self.byte(mode);
                 let result = self.state.accumulator & byte;
                 self.state.status.set(Status::ZERO, result == 0);
-                self.state.status.set(Status::NEGATIVE, byte & 0b1000_0000 != 0);
-                self.state.status.set(Status::OVERFLOW, byte & 0b0100_0000 != 0);
+                self.state
+                    .status
+                    .set(Status::NEGATIVE, byte & 0b1000_0000 != 0);
+                self.state
+                    .status
+                    .set(Status::OVERFLOW, byte & 0b0100_0000 != 0);
             })?,
-            CMP => opcode.address_mode.map(|mode|
-                self.compare(self.state.accumulator, mode)
-            )?,
-            CPX => opcode.address_mode.map(|mode|
-                self.compare(self.state.x_register, mode)
-            )?,
-            CPY => opcode.address_mode.map(|mode|
-                self.compare(self.state.y_register, mode)
-            )?,
+            CMP => opcode
+                .address_mode
+                .map(|mode| self.compare(self.state.accumulator, mode))?,
+            CPX => opcode
+                .address_mode
+                .map(|mode| self.compare(self.state.x_register, mode))?,
+            CPY => opcode
+                .address_mode
+                .map(|mode| self.compare(self.state.y_register, mode))?,
             inst @ (BCC | BNE | BPL | BVC | BCS | BEQ | BMI | BVS) => {
                 opcode.address_mode.and_then(|mode| {
                     let mask = match inst {
@@ -531,7 +549,7 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
             PLA => {
                 let new_acc = self.pop();
                 self.state.accumulator = self.set_flags(new_acc);
-            },
+            }
             PHP => self.push((self.state.status | Status::UNUSED | Status::BREAK).bits()),
             PLP => self.state.status = Status::from_bits_retain(self.pop()) | Status::UNUSED,
             JMP => opcode.address_mode.and_then(|mode| {
@@ -540,11 +558,12 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
                 Some(())
             })?,
             JSR => opcode.address_mode.and_then(|mode| {
-                let [high, low] =
-                    self.state.program_counter
-                        .wrapping_add(u16::from(opcode_length))
-                        .wrapping_sub(1)
-                        .to_le_bytes();
+                let [high, low] = self
+                    .state
+                    .program_counter
+                    .wrapping_add(u16::from(opcode_length))
+                    .wrapping_sub(1)
+                    .to_le_bytes();
                 self.state.program_counter = self.addr(mode)?;
                 self.push(low);
                 self.push(high);
@@ -580,7 +599,10 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
         }
 
         if increment {
-            self.state.program_counter = self.state.program_counter.wrapping_add(u16::from(opcode_length));
+            self.state.program_counter = self
+                .state
+                .program_counter
+                .wrapping_add(u16::from(opcode_length));
         }
 
         Some(false)
@@ -617,16 +639,17 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
 
     /// Computes binary add with carry
     fn adc(&mut self, rhs: u8) -> u8 {
-        let sum =
-            u16::from(self.state.accumulator) +
-            u16::from(rhs) +
-            u16::from(self.state.status.contains(Status::CARRY));
+        let sum = u16::from(self.state.accumulator)
+            + u16::from(rhs)
+            + u16::from(self.state.status.contains(Status::CARRY));
 
         let acc = u16::from(self.state.accumulator);
         let rhs = u16::from(rhs);
 
         self.state.status.set(Status::CARRY, sum > 0xFF);
-        self.state.status.set(Status::OVERFLOW, !(acc ^ rhs) & (acc ^ sum) & 0x80 != 0);
+        self.state
+            .status
+            .set(Status::OVERFLOW, !(acc ^ rhs) & (acc ^ sum) & 0x80 != 0);
 
         let sum = sum as u8;
 
