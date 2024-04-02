@@ -1,6 +1,6 @@
 [package]
 name = "r6502"
-version = "1.0.3"
+version = "1.0.4"
 authors = ["baltdev"]
 edition = "2021"
 description = "A simple NMOS 6502 emulator."
@@ -22,7 +22,6 @@ bytemuck = {version = "1", features = ["derive", "min_const_generics"], optional
 arbitrary = {version = "1", features = ["derive"], optional = true}
 serde = {version = "1", features = ["derive"], optional = true}
 serde_with = {version = "3", optional = true, default-features = false, features = ["macros"]}
-cfg_eval = {version = "0.1", optional = true}
 
 [features]
 default = ["bcd"]
