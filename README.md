@@ -26,7 +26,6 @@ The following feature flags exist:
 | bytemuck  | Enables [bytemuck](https://docs.rs/bytemuck/) support.                                                                                                                                                      |  
 | arbitrary | Enables [arbitrary](https://docs.rs/arbitrary/) support. This will pull in `std`.                                                                                                                           |  
 | serde     | Enables [serde](https://docs.rs/serde) support.                                                                                                                                                             |  
-| hashbrown | Enables [hashbrown](https://docs.rs/hashbrown) support.                                                                                                                                                     |
 
 ## Example
 ```rust ignore  
