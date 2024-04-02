@@ -1,6 +1,6 @@
 [package]
 name = "r6502"
-version = "1.0.2"
+version = "1.0.3"
 authors = ["baltdev"]
 edition = "2021"
 description = "A simple NMOS 6502 emulator."
