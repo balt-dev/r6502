@@ -3,7 +3,7 @@
 [![MSRV](https://img.shields.io/badge/MSRV-1.66.1-gold)](https://gist.github.com/alexheretic/d1e98d8433b602e57f5d0a9637927e0c)
 [![Repository](https://img.shields.io/badge/-GitHub-%23181717?style=flat&logo=github&labelColor=%23555555&color=%23181717)](https://github.com/balt-dev/r6502)
 [![Latest version](https://img.shields.io/crates/v/r6502.svg)](https://crates.io/crates/r6502)
-[![License](https://img.shields.io/crates/l/r6502.svg)](https://github.com/balt-dev/r6502/blob/master/LICENSE-MIT)
+[![License](https://img.shields.io/crates/l/r6502.svg)](https://github.com/balt-dev/r6502/blob/trunk/LICENSE-MIT)
 [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
 ![Maintenance](https://img.shields.io/maintenance/as-is/2024?color=gold)
 # r6502
