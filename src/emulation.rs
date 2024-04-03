@@ -42,21 +42,17 @@ where
     }
 }
 
-/// Default implementor of [`ReadCallback`] for [`Emulator`].
+/// Default implementor of [`ReadCallback`] and [`WriteCallback`] for [`Emulator`].
 #[derive(Debug, Copy, Clone, PartialEq, Eq, core::hash::Hash, Ord, PartialOrd)]
-pub struct DefaultReadCallback;
+pub struct DefaultCallbacks;
 
-impl ReadCallback for DefaultReadCallback {
+impl ReadCallback for DefaultCallbacks {
     fn callback(&mut self, state: &mut State, address: u16) -> u8 {
         state.memory[address as usize]
     }
 }
 
-/// Default implementor of [`WriteCallback`] for [`Emulator`].
-#[derive(Debug, Copy, Clone, PartialEq, Eq, core::hash::Hash, Ord, PartialOrd)]
-pub struct DefaultWriteCallback;
-
-impl WriteCallback for DefaultWriteCallback {
+impl WriteCallback for DefaultCallbacks {
     fn callback(&mut self, state: &mut State, address: u16, byte: u8) {
         state.memory[address as usize] = byte;
     }
@@ -209,12 +205,12 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
     }
 }
 
-impl Default for Emulator<DefaultReadCallback, DefaultWriteCallback> {
+impl Default for Emulator<DefaultCallbacks, DefaultCallbacks> {
     fn default() -> Self {
         Self {
             state: State::default(),
-            read_callback: DefaultReadCallback,
-            write_callback: DefaultWriteCallback,
+            read_callback: DefaultCallbacks,
+            write_callback: DefaultCallbacks,
         }
     }
 }
@@ -251,7 +247,9 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
                 .wrapping_add_signed(i16::from(offset)),
             AbsoluteIndirect(addr) => {
                 let high = self.read(addr);
-                let low = self.read(addr.wrapping_add(1));
+                // Emulate hardware bug: low byte is wrapped around page only
+                let addr_low = (addr as u8).wrapping_add(1);
+                let low = self.read(addr & 0xFF00 | (addr_low as u16));
                 u16::from_le_bytes([high, low])
             }
             AbsoluteX(addr) => addr.wrapping_add(u16::from(self.state.x_register)),

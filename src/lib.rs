@@ -9,7 +9,7 @@ pub mod instructions;
 pub mod state;
 
 pub use emulation::{
-    DefaultReadCallback, DefaultWriteCallback, Emulator, FunctionReadCallback,
+    DefaultCallbacks, Emulator, FunctionReadCallback,
     FunctionWriteCallback, ReadCallback, WriteCallback,
 };
 pub use instructions::{AddressMode, Instruction, Opcode};
