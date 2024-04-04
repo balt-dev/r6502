@@ -405,7 +405,7 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
                     self.state.status.set(Status::NEGATIVE, (sum as i8) < 0);
                     self.state.accumulator = sum;
                 } else {
-                    self.state.accumulator = self.adc(rhs);
+                    self.state.accumulator = self.add(self.state.accumulator, rhs);
                 }
             })?,
             SBC => opcode.address_mode.map(|mode| {
@@ -440,7 +440,7 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
                     self.state.status.set(Status::ZERO, diff == 0);
                     self.state.accumulator = diff;
                 } else {
-                    self.state.accumulator = self.adc(!rhs);
+                    self.state.accumulator = self.add(self.state.accumulator, !rhs);
                 }
             })?,
             INC => opcode.address_mode.map(|mode| {
@@ -628,26 +628,25 @@ impl<R: ReadCallback, W: WriteCallback> Emulator<R, W> {
     /// Drives CMP, CPX, and CPY
     fn compare(&mut self, lhs: u8, mode: AddressMode) {
         let rhs = self.byte(mode);
-        let diff = lhs.wrapping_sub(rhs);
 
-        self.state.status.set(Status::ZERO, diff == 0);
-        self.state.status.set(Status::CARRY, (diff as i8) >= 0);
-        self.state.status.set(Status::NEGATIVE, (diff as i8) < 0);
+        self.state.status.set(Status::ZERO, lhs == rhs);
+        self.state.status.set(Status::CARRY, lhs >= rhs);
+        self.state.status.set(Status::NEGATIVE, (lhs.wrapping_sub(rhs) as i8) < 0);
     }
 
     /// Computes binary add with carry
-    fn adc(&mut self, rhs: u8) -> u8 {
-        let sum = u16::from(self.state.accumulator)
+    fn add(&mut self, lhs: u8, rhs: u8) -> u8 {
+        let sum = u16::from(lhs)
             + u16::from(rhs)
             + u16::from(self.state.status.contains(Status::CARRY));
 
-        let acc = u16::from(self.state.accumulator);
+        let lhs = u16::from(lhs);
         let rhs = u16::from(rhs);
 
         self.state.status.set(Status::CARRY, sum > 0xFF);
         self.state
             .status
-            .set(Status::OVERFLOW, !(acc ^ rhs) & (acc ^ sum) & 0x80 != 0);
+            .set(Status::OVERFLOW, !(lhs ^ rhs) & (lhs ^ sum) & 0x80 != 0);
 
         let sum = sum as u8;
 

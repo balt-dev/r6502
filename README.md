@@ -5,7 +5,7 @@
 [![Latest version](https://img.shields.io/crates/v/r6502.svg)](https://crates.io/crates/r6502)
 [![License](https://img.shields.io/crates/l/r6502.svg)](https://github.com/balt-dev/r6502/blob/trunk/LICENSE-MIT)
 [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
-![Maintenance](https://img.shields.io/maintenance/as-is/2024?color=gold)
+![Maintenance](https://img.shields.io/maintenance/passively-developed/2024?color=ok)
 # r6502
 
 ### Yet another MOS 6502 emulator.
@@ -16,6 +16,8 @@ Designed to support `no-std` and not require an allocator nor any unsafe code, a
 
 The API of this crate shies away from implementing interrupt handling,   
 instead having you step the emulator one opcode at a time and handle them yourself.
+
+Note that this does not emulate cycle-by-cycle, and as such may not be 100% accurate.
 
 ## Feature Flags
 The following feature flags exist:  
